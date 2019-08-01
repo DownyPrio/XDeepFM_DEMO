@@ -29,3 +29,14 @@ res_map=CIN.CIN_model(2,3).divide_col(X,X0)
 print(res_map)
 print(len(res_map))
 print(res_map[0])
+res_map=np.array(res_map)
+filterset=np.array([[[1,0,0,0],
+                    [0,1,0,0],
+                    [0,0,1,0]
+                    ],[[0,0,0,1],
+                       [0,0,1,0],
+                       [0,1,0,0]]])
+print("****************_123")
+filter_res=CIN.CIN_model(2,3).predict(inputset=inputset)
+print(filter_res)
+print(len(filter_res))
