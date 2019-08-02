@@ -14,9 +14,9 @@ class CIN_model(object):
         m=X0.shape[0]
         X_T=X.T
         X0_T=X0.T
-        print(X_T[0].shape)
-        print(X0_T)
-        print("**********")
+        # print(X_T[0].shape)
+        # print(X0_T)
+        # print("**********")
         res_map=[]
         for index in range(H):
             X_res=np.zeros((X.shape[0],X0.shape[0]))
@@ -30,21 +30,23 @@ class CIN_model(object):
     def filter_demo(self,inputset,filterset):
         filter_matrix=[]
         H_pri=len(inputset)
-        print(inputset.shape)
+        # print(inputset.shape)
         inputset=inputset.reshape((H_pri,1,-1))
-        print(inputset.shape)
+        # print(inputset.shape)
         H=len(filterset)
-        print(filterset.shape)
+        # print(filterset.shape)
         filterset=filterset.reshape((H,-1,1))
-        print(filterset.shape)
+        # print(filterset.shape)
         for index in range(len(inputset)):
             field_matrix=[]
             for each in filterset:
-                print(inputset[index])
-                print(each)
+                # print(inputset[index])
+                # print(each)
                 field_matrix.append(np.matmul(inputset[index],each))
+            # print("field_matrix:")
+            # print(field_matrix)
             filter_matrix.append(field_matrix)
-        return filter_matrix
+        return np.array(filter_matrix).reshape((H,self.D))
 
     # def filter(self,H,X,X0):
     #     (x,y)=input.shape
@@ -60,26 +62,24 @@ class CIN_model(object):
         #     flatten_list.append(tmp_res)
         # flatten_list=np.array(flatten_list).reshape(1,)
         # result=LR.perdict(flatten_list)
+        self.D=inputset.shape[1]
         flattendCandiList=[inputset]
         flattendFeature=[]
         for index in range(self.depth):
-            print(flattendCandiList[-1].shape)
+            # print(flattendCandiList[-1].shape)
+            # print("——————————————————————")
+            # print(flattendCandiList[-1].shape)
             (x,y)=flattendCandiList[-1].shape
+
             tmpInputSet=self.divide_col(flattendCandiList[-1],flattendCandiList[0])
             initParaSet=np.zeros((self.H_per,x,y))+1
-            print("init:")
-            print(initParaSet.shape)
+            # print("init:")
+            # print(initParaSet.shape)
             tmpSet=self.filter_demo(tmpInputSet,initParaSet)
+            flattendCandiList.append(tmpSet)
             sumPoolingValue=np.sum(tmpSet,axis=0)
-            print("tmp:")
-            print(tmpSet)
+            # print("tmp:")
+            # print(tmpSet)
             flattendFeature.append(sumPoolingValue)
-            print("Depth:"+str(index)+" completed.")
+            # print("Depth:"+str(index)+" completed.")
         return np.array(flattendFeature).reshape((-1,1,1))
-
-
-
-
-
-    def para_init(self,input):
-        (x,y)=input.shape
