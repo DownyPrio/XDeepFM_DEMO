@@ -8,6 +8,7 @@ class DNN_model(object):
         self.nodes_per=nodes_per
         self.weights=np.zeros((layer_num,nodes_per,nodes_per))+1
         self.biase=np.zeros((layer_num,1,nodes_per))+1
+        print("DNN model initilization completed.")
         # print(self.weights)
         # print(self.biase)
 
@@ -56,7 +57,9 @@ class DNN_model(object):
         out_biase=np.zeros((1,1))+1
         return np.matmul(inputset,out_weights.T)+out_biase
     def predict(self,input):
+        print("DNN prediction start.")
         return self.__hiden_layer(self.__input_layer(input))
+        print("DNN prediction completed.")
         #return self.__out_layer(self.__hiden_layer(self.__input_layer(input)))
 
 

@@ -7,6 +7,7 @@ class CIN_model(object):
     def __init__(self,depth=3,H_per=3):
         self.depth=3
         self.H_per=3
+        print("CIN model initilization completed.")
         return
     def divide_col(self,X,X0):
         H=X.shape[0]
@@ -59,6 +60,7 @@ class CIN_model(object):
     #     result=X*weights
     #     return result
     def predict(self,inputset):
+        print("CIN prediction start.")
         # tmp_list=[input]
         # flatten_list=[]
         # for index in range(self.depth):
@@ -95,4 +97,5 @@ class CIN_model(object):
             # print(np.array(tmpSet).shape)
             # print(len(np.array(flattendFeature).reshape(-1,1,1)))
             # print("Depth:"+str(index)+" completed.")
+        print("CIN prediction completed.")
         return np.array(flattendFeature).reshape((1,-1))

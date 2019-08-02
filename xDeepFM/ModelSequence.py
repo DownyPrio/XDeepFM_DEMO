@@ -19,6 +19,7 @@ class ModelSequence():
         return np.array(flatten_list)
 
     def predict(self,inputSet):
+
         LR_res=LR.LR_model().predict(self.flattenFeature(inputSet))
         # print(LR_res.shape)
         emdFeature=emd.embedding_layer(4).embedding(inputSet)
@@ -40,4 +41,5 @@ class ModelSequence():
         W=np.zeros((flatten_vector.shape[1],1))+1
         B=1
         predictResult=np.matmul(flatten_vector,W)+B
-        return predictResult
+        print("xDeepFM model predict results is:{}".format(str(predictResult[0][0])))
+        return predictResult[0][0]

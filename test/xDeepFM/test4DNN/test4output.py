@@ -35,4 +35,4 @@ def flattenFeature(outSet):
 # emdFeature4CIN=emdFeature.reshape((input.shape[0],-1))
 # print(CIN.CIN_model(3,3).predict(emdFeature4CIN).shape)
 res=Sequence.ModelSequence().predict(input)
-print(res)
+#print(res)
