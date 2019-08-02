@@ -36,12 +36,15 @@ class DNN_model(object):
         return pred_result
 
     def __input_layer(self,testset):
+        # print(testset.shape)
         para_weights=np.zeros((testset.shape[1],self.nodes_per))+1
         para_biase=np.zeros((1,self.nodes_per))+1
-        return np.matmul(testset,para_weights.T)+para_biase
+        # print(testset)
+        # print(para_weights.T)
+        return np.matmul(testset,para_weights)+para_biase
     def __hiden_layer(self,testset):
         tmp_result=testset
-        print(testset)
+        #print(testset)
         #print("*****************")
         for each in range(len(self.weights)-1):
             tmp_result=np.matmul(tmp_result,self.weights[each].T)+self.biase[each]
@@ -53,7 +56,8 @@ class DNN_model(object):
         out_biase=np.zeros((1,1))+1
         return np.matmul(inputset,out_weights.T)+out_biase
     def predict(self,input):
-        return self.__out_layer(self.__hiden_layer(self.__input_layer(input)))
+        return self.__hiden_layer(self.__input_layer(input))
+        #return self.__out_layer(self.__hiden_layer(self.__input_layer(input)))
 
 
 

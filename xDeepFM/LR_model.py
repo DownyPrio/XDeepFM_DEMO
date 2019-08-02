@@ -5,10 +5,13 @@ class LR_model(object):
         pass
 
     def predict(self,input):
-        (x,y)=input.shape
+        print(input)
+        y=len(input)
         weights=np.zeros((1,y))+1
         biase=np.zeros((1,1))+1
         pred_result=[]
-        tmp_input=input
+        tmp_input=np.array([input])
+        print(tmp_input)
+        print(weights.T)
         pred_result=(np.matmul(tmp_input,weights.T)+biase)
-        return pred_result
+        return np.array(pred_result)
