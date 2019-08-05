@@ -1,6 +1,7 @@
 import numpy as np
 from xDeepFM import *
 
+
 class DNN_model(object):
     def __init__(self):
         return
@@ -10,7 +11,7 @@ class DNN_model(object):
         self.activation=activation
         self.weights=np.zeros((layer_num,nodes_per,nodes_per))+1
         self.biase=np.zeros((layer_num,1,nodes_per))+1
-        self.resLayer=np.array([])
+        self.resLayer=[]
         print("DNN model initilization completed.")
         # print(self.weights)
         # print(self.biase)
@@ -45,6 +46,8 @@ class DNN_model(object):
         para_biase=np.zeros((1,self.nodes_per))+1
         # print(testset)
         # print(para_weights.T)
+        m=CIN.CIN_model()
+        Act_func.Activation("sigmoid")
         self.resLayer.append(Act_func.Activation(self.activation).func(np.matmul(testset,para_weights)+para_biase))
         return Act_func.Activation(self.activation).func(np.matmul(testset,para_weights)+para_biase)
     def __hiden_layer(self,testset):
@@ -62,9 +65,12 @@ class DNN_model(object):
         out_biase=np.zeros((1,1))+1
         self.resLayer.append(Act_func.Activation(self.activation).func(np.matmul(inputset,out_weights.T)+out_biase))
         return Act_func.Activation(self.activation).func(np.matmul(inputset,out_weights.T)+out_biase)
-    def predict(self,input=input):
+    def predict(self,input=input,mode=1):
         print("DNN prediction start.")
-        return self.__hiden_layer(self.__input_layer(input))
+        if mode:
+            return self.__hiden_layer(self.__input_layer(input))
+        else:
+            return self.__out_layer(self.__hiden_layer(self.__input_layer(input)))
         print("DNN prediction completed.")
         #return self.__out_layer(self.__hiden_layer(self.__input_layer(input)))
 

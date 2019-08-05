@@ -1,4 +1,5 @@
 from xDeepFM import *
+import numpy as np
 '''
 参数优化类
 '''
@@ -21,7 +22,8 @@ class ParametersUpdate(object):
         for epoch in range(epochs):
             print("epochs:{}/{}".format(str(epoch),str(epochs)))
             for each in trainData:
-                trainY=model.predict(each[:-1])#差一个输出层
+                each=np.array(each).reshape((1,-1))
+                trainY=model.predict(each[:-1],0)#差一个输出层
                 loss=each[-1]*np.log(trainY)+(1-each[-1])*np.log(1-trainY)
                 '''
                 输出层更新
@@ -36,8 +38,8 @@ class ParametersUpdate(object):
                     sigma[-n]=W_para[-(n-1)]*sigma[-(n-1)]*self.relu_derivative(model.resLayer[-n])
                     W_para[-n]-=learing_rate*sigma*model.resLayer[-(n+1)]
                     B_para[-n]-=learing_rate*sigma
-            model.Weights=W_para
-            model.Biase=B_para
+            model.weights=W_para
+            model.biase=B_para
 
 
 
