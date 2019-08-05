@@ -20,7 +20,6 @@ class ModelSequence():
         return np.array(flatten_list)
 
     def predict(self,inputSet):
-
         LR_res=LR.LR_model().predict(self.flattenFeature(inputSet))
         # print(LR_res.shape)
         emdFeature=emd.embedding_layer(4).embedding(inputSet)
@@ -44,3 +43,7 @@ class ModelSequence():
         predictResult=Act_func.Activation("sigmoid").func(np.matmul(flatten_vector,W)+B)
         print("xDeepFM model predict results is:{}".format(str(predictResult[0][0])))
         return predictResult[0][0]
+
+    def fit(self,feature,label):
+        pass
+
