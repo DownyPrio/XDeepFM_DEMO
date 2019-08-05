@@ -1,5 +1,6 @@
 import numpy as np
 import xDeepFM.LR_model as LR
+from xDeepFM import *
 
 class CIN_model(object):
     def __init__(self):
@@ -98,4 +99,5 @@ class CIN_model(object):
             # print(len(np.array(flattendFeature).reshape(-1,1,1)))
             # print("Depth:"+str(index)+" completed.")
         print("CIN prediction completed.")
-        return np.array(flattendFeature).reshape((1,-1))
+        output_res=np.array(flattendFeature).reshape((1,-1))
+        return output_res

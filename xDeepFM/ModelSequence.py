@@ -2,6 +2,7 @@ import xDeepFM.CIN_model as CIN
 import xDeepFM.DNN_model as DNN
 import xDeepFM.LR_model as LR
 import xDeepFM.embedding_layer as emd
+from xDeepFM import *
 import numpy as np
 
 class ModelSequence():
@@ -40,6 +41,6 @@ class ModelSequence():
         #print(flatten_vector.shape)
         W=np.zeros((flatten_vector.shape[1],1))+1
         B=1
-        predictResult=np.matmul(flatten_vector,W)+B
+        predictResult=Act_func.Activation("sigmoid").func(np.matmul(flatten_vector,W)+B)
         print("xDeepFM model predict results is:{}".format(str(predictResult[0][0])))
         return predictResult[0][0]

@@ -1,11 +1,13 @@
 import numpy as np
+from xDeepFM import *
 
 class DNN_model(object):
     def __init__(self):
         return
-    def __init__(self,layer_num=2,nodes_per=2):
+    def __init__(self,layer_num=2,nodes_per=2,activation="relu"):
         self.layer_num=layer_num
         self.nodes_per=nodes_per
+        self.activation=activation
         self.weights=np.zeros((layer_num,nodes_per,nodes_per))+1
         self.biase=np.zeros((layer_num,1,nodes_per))+1
         print("DNN model initilization completed.")
@@ -42,7 +44,7 @@ class DNN_model(object):
         para_biase=np.zeros((1,self.nodes_per))+1
         # print(testset)
         # print(para_weights.T)
-        return np.matmul(testset,para_weights)+para_biase
+        return Act_func.Activation(self.activation).func(np.matmul(testset,para_weights)+para_biase)
     def __hiden_layer(self,testset):
         tmp_result=testset
         #print(testset)
@@ -51,12 +53,12 @@ class DNN_model(object):
             tmp_result=np.matmul(tmp_result,self.weights[each].T)+self.biase[each]
             #print(tmp_result)
             #print("***************")
-        return tmp_result
+        return Act_func.Activation(self.activation).func(tmp_result)
     def __out_layer(self,inputset):
         out_weights=np.zeros((1,self.nodes_per))+1
         out_biase=np.zeros((1,1))+1
-        return np.matmul(inputset,out_weights.T)+out_biase
-    def predict(self,input):
+        return Act_func.Activation(self.activation).func(np.matmul(inputset,out_weights.T)+out_biase)
+    def predict(self,input=input):
         print("DNN prediction start.")
         return self.__hiden_layer(self.__input_layer(input))
         print("DNN prediction completed.")
