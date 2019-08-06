@@ -1,78 +1,84 @@
 import numpy as np
 from xDeepFM import *
-
-
+import xDeepFM.Activation as Act_func
 class DNN_model(object):
     def __init__(self):
+        self.layerList=[]
+        self.Weights=[]
+        self.biase=[]
         return
-    def __init__(self,layer_num=2,nodes_per=2,activation="relu"):
-        self.layer_num=layer_num
-        self.nodes_per=nodes_per
-        self.activation=activation
-        self.weights=np.zeros((layer_num,nodes_per,nodes_per))+1
-        self.biase=np.zeros((layer_num,1,nodes_per))+1
-        self.resLayer=[]
-        print("DNN model initilization completed.")
-        # print(self.weights)
-        # print(self.biase)
-
-    def discribe(self):
-        print("layers_number is:"+str(self.layer_num))
-        print("nodes_num is:"+str(self.nodes_per))+1
-
-    def fit(self,trainset,labelset):
-        (x,y)=trainset.shape
-        Weights=np.array(y*[1])
-        print(Weights)
-        Bias=np.array(3)
-        tmp_result=np.dot(trainset,Weights)+Bias
-        return tmp_result
-    def __lr(self,input,para):
-        (x,y)=input.shape
-        pred_result=[]
-        tmp_input=input
-        for each in range(len(para)):
-            # print("weight：")
-            # print(str(para[0][each]))
-            # print("biase:")
-            # print(para[1][each])
-            pred_result.append(np.dot(tmp_input,para[0][each])+para[1][each])
-            #print("tmp result:"+str(pred_result))
-        return pred_result
-
-    def __input_layer(self,testset):
-        # print(testset.shape)
-        para_weights=np.zeros((testset.shape[1],self.nodes_per))+1
-        para_biase=np.zeros((1,self.nodes_per))+1
-        # print(testset)
-        # print(para_weights.T)
-        m=CIN.CIN_model()
-        Act_func.Activation("sigmoid")
-        self.resLayer.append(Act_func.Activation(self.activation).func(np.matmul(testset,para_weights)+para_biase))
-        return Act_func.Activation(self.activation).func(np.matmul(testset,para_weights)+para_biase)
-    def __hiden_layer(self,testset):
-        tmp_result=testset
-        #print(testset)
-        #print("*****************")
-        for each in range(len(self.weights)-1):
-            tmp_result=np.matmul(tmp_result,self.weights[each].T)+self.biase[each]
-            #print(tmp_result)
-            #print("***************")
-            self.resLayer.append(Act_func.Activation(self.activation).func(tmp_result))
-        return Act_func.Activation(self.activation).func(tmp_result)
-    def __out_layer(self,inputset):
-        out_weights=np.zeros((1,self.nodes_per))+1
-        out_biase=np.zeros((1,1))+1
-        self.resLayer.append(Act_func.Activation(self.activation).func(np.matmul(inputset,out_weights.T)+out_biase))
-        return Act_func.Activation(self.activation).func(np.matmul(inputset,out_weights.T)+out_biase)
-    def predict(self,input=input,mode=1):
-        print("DNN prediction start.")
-        if mode:
-            return self.__hiden_layer(self.__input_layer(input))
+    def append(self,DNN_Layer):
+        self.layerList.append(DNN_Layer)
+    def build_model(self,inputData):
+        if len(self.layerList)==0:
+            print("no layer is detected！")
+            return
         else:
-            return self.__out_layer(self.__hiden_layer(self.__input_layer(input)))
-        print("DNN prediction completed.")
-        #return self.__out_layer(self.__hiden_layer(self.__input_layer(input)))
+            for index in range(len(self.layerList)):
+                if index==0:
+                    w_map=np.zeros((inputData.shape[1],self.layerList[index].nodes))+1
+                    b_map=np.zeros((1,self.layerList[index].nodes))+1
+                else:
+                    w_map=np.zeros((self.Weights[-1].shape[1],self.layerList[index].nodes))+1
+                    b_map=np.zeros((1,self.layerList[index].nodes))+1
+                self.Weights.append(w_map)
+                self.biase.append(b_map)
+            # ow_map=np.zeros((self.layerList[-1].nodes,1))+1
+            # ob_map=np.zeros((1,1))+1
+            # self.Weights.append(ow_map)
+            # self.biase.append(ob_map)
+        self.layer_depth=len(self.layerList)
+        print("-----The number of layer is:")
+        print(self.layer_depth)
+        print("-----DNN model is built successfully!------")
+        print("Built frame weights shape is:")
+        for each in self.Weights:
+            print(each.shape)
+
+    def predict(self,inputData):
+        self.build_model(inputData)
+        dataTensors_list=[inputData]#dataTensors_list=[inputData,*] *为每层计算结果
+        dataTensors=inputData
+        for index in range(self.layer_depth):
+            activation_function_mode=self.layerList[index].activation
+            print("-----Caculate the No.{} layer result-------".format(index+1))
+            dataTensors=np.matmul(dataTensors[-1],self.Weights[index])+self.biase[index]
+            dataTensors=activation_function(activation_function_mode,).activation(dataTensors)
+            dataTensors_list.append(dataTensors)
+            print("results:{}".format(dataTensors))
+            print("-------------------------------------------")
+        print("DNN model predict results is:{}".format(dataTensors[0][0]))
+
+
+
+
+#DNN全连接层对象
+class DNN_Layer(object):
+    def __init__(self,nodes,activation):
+        self.nodes=nodes
+        self.activation=activation
+        return
+
+class activation_function(object):
+    def __init__(self,mode):
+        self.mode=mode
+        return
+    def activation(self,input):
+        if self.mode=="relu":
+            return self.relu(input)
+        elif self.mode=="tanh":
+            return self.tanh(input)
+        elif self.mode=="sigmoid":
+            return self.sigmoid(input)
+        else:
+            print("no such activation functions!")
+    def relu(self,input):
+        return (np.abs(input)+input)/2
+    def tanh(self,input):
+        return np.tanh(input)
+    def sigmoid(self,input):
+        return 1/(1+np.exp(-1*input))
+
 
 
 

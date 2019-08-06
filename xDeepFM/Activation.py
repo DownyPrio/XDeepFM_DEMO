@@ -1,6 +1,9 @@
 from xDeepFM import *
-
+import numpy as np
+print("1111")
 class Activation(object):
+    def __init__(self):
+        return
     def __init__(self,activation_function="sigmoid"):
         self.activation_function=activation_function
         return

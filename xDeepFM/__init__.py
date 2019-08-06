@@ -4,4 +4,7 @@ import xDeepFM.DNN_model as DNN
 import xDeepFM.ModelSequence as Sequence
 import xDeepFM.Activation as Act_func
 import numpy as np
-import xDeepFM.ParametersUpdate as ParaUpdata
+import xDeepFM.ParametersUpdate as ParaUpdate
+
+#__all__=["LR","CIN","np","Act"]
+
