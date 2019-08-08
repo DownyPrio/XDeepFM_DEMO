@@ -17,9 +17,6 @@ class ParametersUpdate(object):
         return input*(1-input)
     def backPropagation(self,trainData,model,learing_rate=0.1,epochs=10):
         model=DNN.DNN_model()
-
-
-
         for epoch in range(epochs):
             print("epochs:{}/{}".format(str(epoch),str(epochs)))
             sigma=[]

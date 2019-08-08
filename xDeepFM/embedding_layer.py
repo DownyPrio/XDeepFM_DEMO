@@ -1,5 +1,6 @@
 import numpy as np
 import xDeepFM.LR_model as LR
+from xDeepFM import *
 
 class embedding_layer(object):
     def __init__(self):
@@ -15,5 +16,6 @@ class embedding_layer(object):
             B=np.zeros((1,self.fieldD))+1
             outEmbedding.append(np.matmul(each,W)+B)
         #print(np.array(outEmbedding).shape)
+        oEmd=np.array(outEmbedding)
         print("embedding end.")
-        return np.array(outEmbedding)
+        return oEmd.reshape((oEmd.shape[0],-1))

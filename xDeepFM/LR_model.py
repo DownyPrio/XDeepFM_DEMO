@@ -7,10 +7,16 @@ class LR_model(object):
 
     def predict(self,input):
         print("LR prediction start")
+        print(input)
         #input是shape为（1,n）的稀疏向量
         #初始化shape为（n,1）的权重向量和（1,1）的biase
         self.weights=np.zeros((input.shape[1],1))+1
         self.biase=np.zeros((1,1))+1
         #result.shape=（1,1）
         result=np.matmul(input,self.weights)+self.biase
-        return result[0][0]
+        return result
+
+    def paramatersUpdate(self,rate,seq,inputFeature):
+        theta=seq.LR_W_delta*self.W
+        self.W_delta=-rate*theta*inputFeature
+        self.B_delta=-rate*theta
