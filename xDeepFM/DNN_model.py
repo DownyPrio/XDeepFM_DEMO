@@ -68,7 +68,7 @@ class DNN_model(object):
     def trans(self,list1):
         for index in range(len(list1)):
             list1[index]=list1[index].T
-
+    #输入：学习率，带有theta项的sequence对象，暂存数据
     def paramatersUpdate(self,rate,seq,dataTensors_list):
         W_delta_list=[]
         B_delta_list=[]
@@ -78,7 +78,8 @@ class DNN_model(object):
             # print(theta_list[-1].shape)
             # print(len(dataTensors_list))
             product_mul=np.matmul(self.Weights[index],theta_list[-1])
-            product_star=activation_function("relu").relu_derivative(dataTensors_list[index]).reshape((-1,1))#*self.Weights[index]
+            #product_star=activation_function("relu").relu_derivative(dataTensors_list[index]).reshape((-1,1))#*self.Weights[index]
+            product_star=dataTensors_list[index].reshape((-1,1))
             # print(product_mul)
             # print(product_star)
             theta=product_star*product_mul
@@ -100,6 +101,18 @@ class DNN_model(object):
         # print(B_delta_list)
         self.Weights=self.delta_process(self.Weights,self.mul_process(rate,W_delta_list))
         self.biase=self.delta_process(self.biase,self.mul_process(rate,B_delta_list))
+
+    def fit(self,trainSet,labelSet,epochs,learning_rate,seq,optimizer="sgd"):
+        if optimizer=="sgd":
+            for i in range(epochs):
+                print("epochs:{}/{}".format(i,epochs))
+                for index in range(len(trainSet)):
+                    result,dataTensors_list=self.predict(trainSet[index])
+                    seq_1=seq(labelSet[index][0][0],result[0][0])
+                    self.paramatersUpdate(learning_rate,seq_1,dataTensors_list)
+            return
+        elif optimizer=="batch_sgd":
+            return
 
 
 
@@ -123,6 +136,8 @@ class activation_function(object):
             return self.tanh(input)
         elif self.mode=="sigmoid":
             return self.sigmoid(input)
+        elif self.mode=="none":
+            return input
         else:
             print("no such activation functions!")
     def relu(self,input):
