@@ -20,10 +20,6 @@ class ModelSequence():
             for elements in each[0]:
                 flatten_list.append(elements)
         return np.array(flatten_list)
-
-
-
-
     def predict(self,inputSet):
         #输出格式均为np.array((1,n)),即[[1,2,3,4,5]]
         # print(inputSet)
@@ -66,7 +62,6 @@ class ModelSequence():
         return predictResult
     def sigmoid(self,input):
         return 1/(1+np.exp(-input))
-
     def paramatersUpdate(self,label,result,tmp_result,N,rate):
         LR_res=tmp_result[0]
         CIN_res=tmp_result[1]
@@ -80,8 +75,9 @@ class ModelSequence():
         self.CIN_W_delta=-rate*theta*CIN_res
         self.DNN_W_delta=-rate*theta*DNN_res
         self.B_delta=-rate*theta
+    def fit(self,feature,label,epochs,learning_rate_list,optimizer_list):
+        self.LR_model.fit(feature,label,epochs,learning_rate_list[0],self,optimizer_list[0])
+        self.DNN_model.fit(feature,label,epochs,learning_rate_list[1],self,optimizer_list[1])
+        self.CIN_model.fit(feature,label,epochs,learning_rate_list[2],self,optimizer_list[2])
 
-
-    def fit(self,feature,label):
-        pass
 
